@@ -1,0 +1,42 @@
+meta {
+  name: Create person
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/person
+  body: json
+  auth: awsv4
+}
+
+auth:awsv4 {
+  accessKeyId: 
+  secretAccessKey: 
+  sessionToken: 
+  service: execute-api
+  region: {{region}}
+  profileName: {{profile}}
+}
+
+body:json {
+  {
+    "firstName": "Piet",
+    "lastName": "Plantsoen",
+    "phoneNumber": "+31612345678",
+    "address": {
+      "street": "Rijksstraatweglaan",
+      "houseNumber": "29",
+      "postalCode": "1221DE",
+      "city": "Amsterdam",
+      "country": "NL"
+    }
+  }
+}
+
+tests {
+  test("returns 201 with a ULID personId", function () {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody().personId).to.match(/^[0-9A-Z]{26}$/);
+  });
+}

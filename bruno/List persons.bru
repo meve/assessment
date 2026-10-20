@@ -1,0 +1,32 @@
+meta {
+  name: List persons
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/person?limit=25
+  body: none
+  auth: awsv4
+}
+
+params:query {
+  limit: 25
+  ~nextToken:
+}
+
+auth:awsv4 {
+  accessKeyId:
+  secretAccessKey:
+  sessionToken:
+  service: execute-api
+  region: {{region}}
+  profileName: {{profile}}
+}
+
+tests {
+  test("returns 200 with items", function () {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().items).to.be.an("array");
+  });
+}
